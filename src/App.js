@@ -1,33 +1,49 @@
 import React, { useState } from "react";
+import "./App.css";
+
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+
+//react-router
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
+//toast
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
-import firebase from "firebase/app";
-import "firebase/auth";
-import "./App.css";
-import { UserContext } from "./Context/UserContext";
 
+//firebase
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+
+//elements
 import Home from "./Pages/Home";
 import Signin from "./Pages/Signin";
 import Signup from "./Pages/Signup";
 import PageNotFound from "./Pages/PageNotFound";
+import { UserContext } from "./Context/UserContext";
+import Footer from "./Layout/Footer";
+import Header from "./Layout/Header";
+import FirebaseConfig from "./Config/FirebaseConfig";
 
+// init firebase
+firebase.initializeApp(FirebaseConfig);
 const App = () => {
   const [user, setUser] = useState(null);
 
   return (
-    <Router>
+    <BrowserRouter>
       <ToastContainer />
       <UserContext.Provider value={{ user, setUser }}>
+        <Header />
+
         <Routes>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/signin" component={Signin} />
-          <Route exact path="/signup" component={Signup} />
-          <Route exact path="*" component={PageNotFound} />
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/signin" element={<Signin />} />
+          <Route exact path="/signup" element={<Signup />} />
+          <Route exact path="*" element={<PageNotFound />} />
         </Routes>
+        <Footer />
       </UserContext.Provider>
-    </Router>
+    </BrowserRouter>
   );
 };
 
